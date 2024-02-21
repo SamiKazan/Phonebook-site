@@ -48,9 +48,7 @@ app.get('/api/persons', (request, response) => {
 
 //Using this temporarily because i cant get the frontend
 //to go to the correct url
-app.get('/persons', (request, response) => {
-    response.redirect('/api/persons')
-})
+
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
