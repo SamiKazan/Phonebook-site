@@ -70,6 +70,13 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+app.delete('/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id !== id)
+
+    response.status(204).end()
+})
+
 const generateId = () => {
     const newId = Math.random * 1000
     return newId
