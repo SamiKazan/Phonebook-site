@@ -23,8 +23,6 @@ let persons = [
     }
 ]
 
-
-
 app.get('/info', (request, response) => {
     const time = new Date
 
@@ -46,10 +44,6 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
-//Using this temporarily because i cant get the frontend
-//to go to the correct url
-
-
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
@@ -62,13 +56,6 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-
-    response.status(204).end()
-})
-
-app.delete('/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
 
@@ -106,33 +93,6 @@ app.post('/api/persons', (request, response) => {
     persons = persons.concat(person)
     response.json(person)
 })
-
-//Using this temporarily because i cant get the frontend
-//to go to the correct url
-app.post('/persons', (request, response) => {
-    const body = request.body
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'name missing'
-        })
-    } if (!body.number) {
-        return response.status(400).json({
-            error: 'number missing'
-        })
-    } if (persons.find(person => person.name === body.name)) {
-        return response.status(418).json({
-            error: 'name is already in use'
-        })
-    }
-    const person = {
-        id: generateId(),
-        name: body.name,
-        number: body.number
-    }
-    persons = persons.concat(person)
-    response.json(person)
-})
-
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT)
