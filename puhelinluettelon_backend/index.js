@@ -7,7 +7,7 @@ app.use(express.static('dist'))
 const cors = require('cors')
 app.use(cors())
 app.use(express.json())
-const Person = require("./models/person")
+const Person = require('./models/person')
 
 const morgan = require('morgan')
 morgan.token('body', (req, res) => JSON.stringify(req.body))
@@ -15,21 +15,21 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 
 app.get('/info', async (request, response) => {
-        const amount = await Person.countDocuments({})
-        const time = new Date
+    const amount = await Person.countDocuments({})
+    const time = new Date
 
-        const info = `
-            <html>
-                <head>
-                    <title>info</title>
-                </head>
-                <body>
-                    <p>Phonebook has info of ${amount} people</p>
-                    <p>${time}</p>
-                </body>
-            </html>
-        `;
-        response.send(info)
+    const info = `
+        <html>
+            <head>
+                <title>info</title>
+            </head>
+            <body>
+                <p>Phonebook has info of ${amount} people</p>
+                <p>${time}</p>
+            </body>
+        </html>
+    `
+    response.send(info)
 })
 
 app.get('/api/persons', (request, response) => {
@@ -75,13 +75,13 @@ app.post('/api/persons', (request, response, next) => {
     let parts = body.number.split('-')
 
     if (parts.length !== 2) {
-        return response.status(400).json({ error: "Phone number must have exactly two parts separated by a hyphen" })
+        return response.status(400).json({ error: 'Phone number must have exactly two parts separated by a hyphen' })
     }
     if ([2, 3].indexOf(parts[0].length) === -1) {
-        return response.status(400).json({ error: "First part of the phone number must have 2 or 3 digits" })
+        return response.status(400).json({ error: 'First part of the phone number must have 2 or 3 digits' })
     }
     if (parts[1].length < 4) {
-        return response.status(400).json({ error: "Second part of the phone number must have at least 4 digits" })
+        return response.status(400).json({ error: 'Second part of the phone number must have at least 4 digits' })
     }
 
     const person = new Person({
@@ -104,7 +104,7 @@ app.put('/api/persons/:id', (request, response, next) => {
         number: body.number
     }
 
-    Person.findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: "query" })
+    Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true, context: 'query' })
         .then(updatedPerson => {
             response.json(updatedPerson)
         })
@@ -114,16 +114,15 @@ app.put('/api/persons/:id', (request, response, next) => {
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
   
-    if (error.name === "CastError") {
-        return response.status(400).send({ error: "malformatted id" })
-    } else if (error.name === "ValidationError") {
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message })
     }
   
     next(error)
 }
-app.use(errorHandler)
-  
+app.use(errorHandler) 
 const PORT = process.env.PORT
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
